@@ -1,0 +1,4 @@
+name: NeteaseWordsCheck
+main: com.remiaft.neteasewordscheck.bungee.NeteaseWordsCheckBungeePlugin
+version: ${project.version}
+author: Angelhell
