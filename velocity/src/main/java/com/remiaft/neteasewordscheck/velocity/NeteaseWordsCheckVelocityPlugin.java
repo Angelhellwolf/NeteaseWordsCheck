@@ -47,7 +47,11 @@ public final class NeteaseWordsCheckVelocityPlugin {
     public void onProxyInitialization(ProxyInitializeEvent event) {
         try {
             initialize();
-            server.getCommandManager().register("neteasecheck", new NeteaseCheckCommand(), "nwc");
+            server.getEventManager().register(this, this);
+            server.getCommandManager().register(
+                    server.getCommandManager().metaBuilder("neteasecheck").aliases("nwc").build(),
+                    new NeteaseCheckCommand()
+            );
             logger.info("NeteaseWordsCheck Velocity module enabled.");
         } catch (IOException exception) {
             logger.error("Failed to initialize plugin", exception);
