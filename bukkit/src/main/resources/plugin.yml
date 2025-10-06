@@ -1,0 +1,9 @@
+name: NeteaseWordsCheck
+main: com.remiaft.neteasewordscheck.bukkit.NeteaseWordsCheckBukkitPlugin
+version: ${project.version}
+author: Angelhell
+api-version: 1.13
+commands:
+  neteasecheck:
+    description: 检查一段文本是否包含敏感词
+    usage: /neteasecheck <内容>
