@@ -1,0 +1,13 @@
+cache:
+  mode: H2
+  ttl-minutes: 60
+chat:
+  block-on-violation: true
+mysql:
+  host: localhost
+  port: 3306
+  database: netease_words
+  username: root
+  password: ""
+  use-ssl: false
+worker-threads: 4
