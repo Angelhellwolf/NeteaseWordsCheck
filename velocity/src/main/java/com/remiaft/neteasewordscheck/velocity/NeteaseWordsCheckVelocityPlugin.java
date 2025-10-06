@@ -47,6 +47,7 @@ public final class NeteaseWordsCheckVelocityPlugin {
     public void onProxyInitialization(ProxyInitializeEvent event) {
         try {
             initialize();
+            server.getEventManager().register(this, this);
             server.getCommandManager().register(
                     server.getCommandManager().metaBuilder("neteasecheck").aliases("nwc").build(),
                     new NeteaseCheckCommand()
