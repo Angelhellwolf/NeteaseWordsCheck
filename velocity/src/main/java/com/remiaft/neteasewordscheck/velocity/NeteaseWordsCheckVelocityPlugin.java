@@ -11,7 +11,6 @@ import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.event.player.PlayerChatEvent;
 import com.velocitypowered.api.plugin.Plugin;
-import com.velocitypowered.api.plugin.PluginContainer;
 import com.velocitypowered.api.proxy.ProxyServer;
 import net.kyori.adventure.text.Component;
 import org.slf4j.Logger;
@@ -33,32 +32,26 @@ public final class NeteaseWordsCheckVelocityPlugin {
     private final ProxyServer server;
     private final Logger logger;
     private final Path dataDirectory;
-    private final PluginContainer pluginContainer;
 
     private NeteaseWordsCheckCore core;
     private PluginConfiguration configuration;
 
     @Inject
-    public NeteaseWordsCheckVelocityPlugin(ProxyServer server,
-                                           Logger logger,
-                                           PluginContainer pluginContainer,
-                                           @com.velocitypowered.api.plugin.annotation.DataDirectory Path dataDirectory) {
+    public NeteaseWordsCheckVelocityPlugin(ProxyServer server, Logger logger, @com.velocitypowered.api.plugin.annotation.DataDirectory Path dataDirectory) {
         this.server = server;
         this.logger = logger;
         this.dataDirectory = dataDirectory;
-        this.pluginContainer = pluginContainer;
     }
 
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
         try {
             initialize();
-            server.getCommandManager()
-                    .register(server.getCommandManager()
-                            .metaBuilder("neteasecheck")
-                            .aliases("nwc")
-                            .plugin(pluginContainer)
-                            .build(), new NeteaseCheckCommand());
+            server.getEventManager().register(this, this);
+            server.getCommandManager().register(
+                    server.getCommandManager().metaBuilder("neteasecheck").aliases("nwc").build(),
+                    new NeteaseCheckCommand()
+            );
             logger.info("NeteaseWordsCheck Velocity module enabled.");
         } catch (IOException exception) {
             logger.error("Failed to initialize plugin", exception);
@@ -122,7 +115,7 @@ public final class NeteaseWordsCheckVelocityPlugin {
         for (Handler handler : julLogger.getHandlers()) {
             julLogger.removeHandler(handler);
         }
-        Handler bridgeHandler = new Handler() {
+        julLogger.addHandler(new Handler() {
             @Override
             public void publish(LogRecord record) {
                 if (!isLoggable(record)) {
@@ -149,9 +142,7 @@ public final class NeteaseWordsCheckVelocityPlugin {
             @Override
             public void close() {
             }
-        };
-        bridgeHandler.setLevel(Level.ALL);
-        julLogger.addHandler(bridgeHandler);
+        });
         julLogger.setLevel(Level.ALL);
         return julLogger;
     }
