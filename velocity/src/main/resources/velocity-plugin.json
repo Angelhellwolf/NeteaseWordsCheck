@@ -1,0 +1,7 @@
+{
+  "id": "neteasewordscheck",
+  "name": "NeteaseWordsCheck",
+  "version": "${project.version}",
+  "authors": ["Angelhell"],
+  "main": "com.remiaft.neteasewordscheck.velocity.NeteaseWordsCheckVelocityPlugin"
+}
